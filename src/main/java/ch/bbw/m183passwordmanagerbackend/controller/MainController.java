@@ -10,6 +10,12 @@ import java.util.List;
 @Controller
 public class MainController {
     @GetMapping("/")
+    public String Start(){
+
+        return "login";
+    }
+
+    @GetMapping("/dashboard")
     public String Home(){
 
         return "home";

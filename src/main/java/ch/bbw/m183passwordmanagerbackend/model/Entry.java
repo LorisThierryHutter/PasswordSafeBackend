@@ -14,7 +14,7 @@ public class Entry {
     private String url;
     private String password;
     private String userEmail;
-
+    private String user;
 
     public Entry() {
     }
@@ -59,6 +59,13 @@ public class Entry {
         this.userEmail = userEmail;
     }
 
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
 
 }
 
