@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Entry</title>
+</head>
+<body>
+<h2>Add New Entry</h2>
+<form th:action="@{/entries}" method="post">
+  <label for="entryName">Name:</label>
+  <input type="text" id="entryName" name="entryName" required autocomplete="off"/><br/>
+
+  <label for="email">Email:</label>
+  <input type="text" id="email" name="email" required autocomplete="off"/><br/>
+
+  <label for="url">Url:</label>
+  <input type="url" id="url" name="url" required autocomplete="off"/><br/>
+
+  <label for="password">Password:</label>
+  <input type="password" id="password" name="password" required autocomplete="off"/><br/>
+
+  <button type="submit">Save</button>
+</form>
+</body>
+</html>

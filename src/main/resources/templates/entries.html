@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Entry List</title>
+</head>
+<body>
+<h1>Entry List</h1>
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>User Email</th>
+    <th>Password</th>
+    <th>URL</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="entry : ${entries}">
+    <td th:text="${entry.id}"></td>
+    <td th:text="${entry.entryName}"></td>
+    <td th:text="${entry.userEmail}"></td>
+    <td th:text="${entry.password}"></td>
+    <td th:text="${entry.url}"></td>
+    <td>
+      <a th:action="@{/entries/{id}(id=${entry.id})}">Edit</a>
+      <a th:action="@{/entries/{id}/delete(id=${entry.id})}">Delete</a>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<a href="addEntry">Add new Password</a>
+</body>
+</html>
