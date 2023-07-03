@@ -1,4 +1,4 @@
-package ch.bbw.m183passwordmanagerbackend;
+package ch.bbw.m183passwordmanagerbackend.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

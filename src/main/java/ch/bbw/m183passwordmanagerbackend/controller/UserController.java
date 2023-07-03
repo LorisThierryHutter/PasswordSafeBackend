@@ -1,5 +1,7 @@
-package ch.bbw.m183passwordmanagerbackend;
+package ch.bbw.m183passwordmanagerbackend.controller;
 
+import ch.bbw.m183passwordmanagerbackend.model.User;
+import ch.bbw.m183passwordmanagerbackend.service.UserRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
