@@ -3,7 +3,6 @@ package ch.bbw.m183passwordmanagerbackend.controller;
 import ch.bbw.m183passwordmanagerbackend.model.Entry;
 import ch.bbw.m183passwordmanagerbackend.model.User;
 import ch.bbw.m183passwordmanagerbackend.service.EntryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

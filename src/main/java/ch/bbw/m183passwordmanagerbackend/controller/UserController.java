@@ -3,7 +3,7 @@ package ch.bbw.m183passwordmanagerbackend.controller;
 import ch.bbw.m183passwordmanagerbackend.model.User;
 import ch.bbw.m183passwordmanagerbackend.service.EntryRepository;
 import ch.bbw.m183passwordmanagerbackend.service.UserRepository;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +13,16 @@ import java.util.List;
 @Controller
 public class UserController {
 
+    @Autowired
     private UserRepository userRepository;
     private EntryRepository entryRepository;
 
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+    @Autowired
+    public UserController(EntryRepository entryRepository) {
+        this.entryRepository = entryRepository;
     }
 
     @PostMapping("/login")
@@ -46,22 +51,19 @@ public class UserController {
         return "redirect:/dashboard";
     }
 
-    @GetMapping("/user")
-    public String getUserData(Model model) {
-        User user = new User();
-        String email = user.getEmail();
+    @GetMapping("/user/{id}")
+    public String getUserData(@PathVariable int id, Model model) {
+        // Retrieve user data
+        User user = userRepository.getUserById(id);
 
-        // Get the user object from the database
-        userRepository.findByEmail(email);
-
-        // Get the count of entries for the user
+        // Get the entry count for the user
         int entryCount = entryRepository.getEntryCountByUser(user);
 
-        // Add the user and entry count to the model
+        // Add data to the model
         model.addAttribute("user", user);
         model.addAttribute("entryCount", entryCount);
 
-        return "user";
+        return "user"; // Return the name of the user profile HTML page
     }
 
 }
