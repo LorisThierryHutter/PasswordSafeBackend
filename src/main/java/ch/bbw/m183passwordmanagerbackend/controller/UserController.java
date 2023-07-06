@@ -4,31 +4,25 @@ import ch.bbw.m183passwordmanagerbackend.model.User;
 import ch.bbw.m183passwordmanagerbackend.service.EntryRepository;
 import ch.bbw.m183passwordmanagerbackend.service.PasswordEncrypterService;
 import ch.bbw.m183passwordmanagerbackend.service.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
 
-@Controller
+@RestController
 public class UserController {
 
-    @Autowired
     private UserRepository userRepository;
     private EntryRepository entryRepository;
 
     private PasswordEncrypterService passwordEncrypterService;
 
-    public UserController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository, EntryRepository entryRepository) {
         this.userRepository = userRepository;
-    }
-    @Autowired
-    public UserController(EntryRepository entryRepository) {
         this.entryRepository = entryRepository;
     }
 
-    @PostMapping("/login")
+    @GetMapping("/login")
     public String login(@RequestParam("email") String email, @RequestParam("password") String password) {
         // Retrieve the user from the database based on the email
         User user = userRepository.findByEmail(email);
@@ -44,11 +38,6 @@ public class UserController {
     }
 
     @GetMapping("/signup")
-    public String signupPage() {
-        return "signup";
-    }
-
-    @PostMapping("/signup")
     public String signup(@ModelAttribute Model model, User user) {
 
         boolean isExistingUser = userRepository.existsById(user.getId());
@@ -80,6 +69,31 @@ public class UserController {
         model.addAttribute("entryCount", entryCount);
 
         return "user"; // Return the name of the user profile HTML page
+    }
+
+    @PutMapping("/{id}/updateUser")
+    public User updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+        // Find the existing entry
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("User not found with id: " + id);
+        }
+
+        User existingUser = optionalUser.get();
+
+        // Update the fields of the existing entry
+        existingUser.setName(updatedUser.getName());
+        existingUser.setEmail(updatedUser.getEmail());
+        existingUser.setMasterPassword(updatedUser.getMasterPassword());
+
+        // Encrypt the password if it has changed
+        if (!existingUser.getMasterPassword().equals(updatedUser.getMasterPassword())) {
+            String encryptedPassword = getPasswordEncrypterService().encryptPassword(updatedUser.getMasterPassword(), updatedUser.getEmail());
+            existingUser.setMasterPassword(encryptedPassword);
+        }
+
+        // Save the updated entry
+        return userRepository.save(existingUser);
     }
 
     public PasswordEncrypterService getPasswordEncrypterService() {

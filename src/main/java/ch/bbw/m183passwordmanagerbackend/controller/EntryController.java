@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+@RestController
 public class EntryController {
 
     private final EntryRepository entryRepository;
@@ -22,7 +22,7 @@ public class EntryController {
         this.entryRepository = entryRepository;
     }
 
-    @GetMapping("/entries")
+    @GetMapping("/entries/all")
     public String getEntries(Model model) {
         List<Entry> entries = entryRepository.findAll();
         model.addAttribute("entries", entries);
@@ -53,7 +53,7 @@ public class EntryController {
         return "redirect:/entries";
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/update")
     public Entry updateEntry(@PathVariable Long id, @RequestBody Entry updatedEntry) {
         // Find the existing entry
         Optional<Entry> optionalEntry = entryRepository.findById(id);

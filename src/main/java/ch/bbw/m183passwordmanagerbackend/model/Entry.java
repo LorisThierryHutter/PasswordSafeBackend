@@ -1,11 +1,9 @@
 package ch.bbw.m183passwordmanagerbackend.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name="entries")
 public class Entry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
