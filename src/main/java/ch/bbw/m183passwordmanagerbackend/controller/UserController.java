@@ -2,6 +2,7 @@ package ch.bbw.m183passwordmanagerbackend.controller;
 
 import ch.bbw.m183passwordmanagerbackend.model.User;
 import ch.bbw.m183passwordmanagerbackend.service.EntryRepository;
+import ch.bbw.m183passwordmanagerbackend.service.PasswordEncrypterService;
 import ch.bbw.m183passwordmanagerbackend.service.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,8 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
     private EntryRepository entryRepository;
+
+    private PasswordEncrypterService passwordEncrypterService;
 
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -47,6 +50,19 @@ public class UserController {
 
     @PostMapping("/signup")
     public String signup(@ModelAttribute Model model, User user) {
+
+        boolean isExistingUser = userRepository.existsById(user.getId());
+        if (isExistingUser) {
+            model.addAttribute("error", "Entry with the same URL already exists for the current user.");
+            return "redirect:/login";
+        }
+
+        // Encrypt the password using AES
+        String encryptedPassword = getPasswordEncrypterService().encryptPassword(user.getMasterPassword(), user.getEmail());
+
+        // Save the encrypted password to the entry
+        user.setMasterPassword(encryptedPassword);
+
         userRepository.save(user);
         return "redirect:/dashboard";
     }
@@ -64,6 +80,14 @@ public class UserController {
         model.addAttribute("entryCount", entryCount);
 
         return "user"; // Return the name of the user profile HTML page
+    }
+
+    public PasswordEncrypterService getPasswordEncrypterService() {
+        return passwordEncrypterService;
+    }
+
+    public void setPasswordEncrypterService(PasswordEncrypterService passwordEncrypterService) {
+        this.passwordEncrypterService = passwordEncrypterService;
     }
 
 }
